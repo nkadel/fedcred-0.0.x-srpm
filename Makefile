@@ -37,7 +37,7 @@ $(MOCKS):: srpm FORCE
 		install rpmbuild/SRPMS/*.src.rpm $@.src.rpm; \
 		echo "Building $@.src.rpm in $@"; \
 		rm -rf $@; \
-		mock -q -r $(PWD)/../$@.cfg \
+		mock -q -r $@ \
 		     --resultdir=$(PWD)/$@ \
 		     $@.src.rpm; \
 	fi

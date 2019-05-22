@@ -32,8 +32,8 @@ BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 %endif # with_python2
 %if 0%{with_python3}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
 %endif # with_python3
 
 %if 0%{with_python2}
@@ -51,17 +51,17 @@ Requires:       python2-requests_ntlm >= 1.0.0
 %endif # with_python2
 
 %if 0%{with_python3}
-%package -n python3-%{pypi_name}
+%package -n python%{python3_pkgversion}-%{pypi_name}
 Version:        0.0.2
 Release:        0%{?dist}
 Url:            https://github.com/broamski/aws-fedcred
 Summary:        Get AWS API Credentials When using an Identity Provider/Federation
 License:        UNKNOWN (FIXME:No SPDX)
-Requires:       python3-beautifulsoup4 >= 4.4.1
-Requires:       python3-boto3 >= 1.2.3
-Requires:       python3-requests >= 2.8.1
-Requires:       python3-requests_ntlm >= 1.0.0
-%{?python_provide:%python_provide python3-%{pypi_name}}
+Requires:       python%{python3_pkgversion}-beautifulsoup4 >= 4.4.1
+Requires:       python%{python3_pkgversion}-boto3 >= 1.2.3
+Requires:       python%{python3_pkgversion}-requests >= 2.8.1
+Requires:       python%{python3_pkgversion}-requests_ntlm >= 1.0.0
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 %endif # with_python3
 
 %description
@@ -88,7 +88,7 @@ The following identity providers are currently supported:
 %endif # with_python2
 
 %if 0%{with_python3}
-%description -n python3-%{pypi_name}
+%description -n python%{python3_pkgversion}-%{pypi_name}
 fedcred: Obtain AWS API Credentials when using Federation/Identity Providers to authenticate to AWS
 ===================================================================================================
 
@@ -140,7 +140,7 @@ rm -rf %{buildroot}
 %endif # with_python2
 
 %if 0%{with_python3}
-%files -n python3-%{pypi_name}
+%files -n python%{python3_pkgversion}-%{pypi_name}
 %defattr(-,root,root,-)
 %doc README.rst
 %{_bindir}/fedcred-%{python3_version}
@@ -149,3 +149,6 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Wec May 22 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.0.2-0
+- Create initial setup
+

@@ -14,13 +14,6 @@
 # Use python3 only
 %global with_python2 0
 
-# Older RHEL does not use dnf, does not support "Suggests"
-%if 0%{?fedora} || 0%{?rhel} > 7
-%global with_dnf 1
-%else
-%global with_dnf 0
-%endif
-
 %global pypi_name fedcred
 
 # Common SRPM package
@@ -68,8 +61,6 @@ Requires:       python3-beautifulsoup4 >= 4.4.1
 Requires:       python3-boto3 >= 1.2.3
 Requires:       python3-requests >= 2.8.1
 Requires:       python3-requests_ntlm >= 1.0.0
-%if 0%{with_dnf}
-%endif # with_dnf
 %{?python_provide:%python_provide python3-%{pypi_name}}
 %endif # with_python3
 

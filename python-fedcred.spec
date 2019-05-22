@@ -37,18 +37,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %if 0%{with_python2}
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
-Requires:  python2-beautifulsoup4 >= 4.4.1
-Requires:  python2-boto3 >= 1.2.3
-Requires:  python2-requests >= 2.8.1
-Requires:  python2-requests_ntlm >= 1.0.0
 %endif # with_python2
 %if 0%{with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
-Requires:  python3-beautifulsoup4 >= 4.4.1
-Requires:  python3-boto3 >= 1.2.3
-Requires:  python3-requests >= 2.8.1
-Requires:  python3-requests_ntlm >= 1.0.0
 %endif # with_python3
 
 %if 0%{with_python2}

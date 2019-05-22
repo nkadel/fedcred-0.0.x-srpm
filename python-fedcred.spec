@@ -11,12 +11,8 @@
 # Older RHEL requires EPEL and python34 or python36
 %global with_python3 1
 
-# Fedora > 30 no longer publishes python2 by default
-%if 0%{?fedora} > 30
+# Use python3 only
 %global with_python2 0
-%else
-%global with_python2 1
-%endif
 
 # Older RHEL does not use dnf, does not support "Suggests"
 %if 0%{?fedora} || 0%{?rhel} > 7

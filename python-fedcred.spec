@@ -10,7 +10,13 @@
 # Fedora and RHEL split python2 and python3
 # Older RHEL requires EPEL and python34 or python36
 %global with_python3 1
+
+# Fedora > 30 no longer publishes python2 by default
+%if 0%{?fedora} > 30
 %global with_python2 0
+%else
+%global with_python2 1
+%endif
 
 # Older RHEL does not use dnf, does not support "Suggests"
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -35,18 +41,18 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %if 0%{with_python2}
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
-BuildRequires:  python2-beautifulsoup4 >= 4.4.1
-BuildRequires:  python2-boto3 >= 1.2.3
-BuildRequires:  python2-requests >= 2.8.1
-BuildRequires:  python2-requests_ntlm >= 1.0.0
+Requires:  python2-beautifulsoup4 >= 4.4.1
+Requires:  python2-boto3 >= 1.2.3
+Requires:  python2-requests >= 2.8.1
+Requires:  python2-requests_ntlm >= 1.0.0
 %endif # with_python2
 %if 0%{with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
-BuildRequires:  python3-beautifulsoup4 >= 4.4.1
-BuildRequires:  python3-boto3 >= 1.2.3
-BuildRequires:  python3-requests >= 2.8.1
-BuildRequires:  python3-requests_ntlm >= 1.0.0
+Requires:  python3-beautifulsoup4 >= 4.4.1
+Requires:  python3-boto3 >= 1.2.3
+Requires:  python3-requests >= 2.8.1
+Requires:  python3-requests_ntlm >= 1.0.0
 %endif # with_python3
 
 %if 0%{with_python2}
@@ -60,8 +66,6 @@ Requires:       python2-beautifulsoup4 >= 4.4.1
 Requires:       python2-boto3 >= 1.2.3
 Requires:       python2-requests >= 2.8.1
 Requires:       python2-requests_ntlm >= 1.0.0
-%if 0%{with_dnf}
-%endif # with_dnf
 %{?python_provide:%python_provide python2-%{pypi_name}}
 %endif # with_python2
 
@@ -115,52 +119,6 @@ The following identity providers are currently supported:
 * Active Directory Federation Services (ADFS)
 * Okta
 
-Installation:
--------------
-
-Option 1
-~~~~~~~~
-.. code-block:: sh
-
-    $ pip install fedcred
-
-Option 2
-~~~~~~~~
-
-.. code-block:: sh
-
-    1. Clone this repo
-    2. $ python setup.py install
-
-
-Config File Setup
-----------------------
-
-The configuation file is named ``fedcred.config`` and should exist in the users home directory.
-
-.. code-block:: ini
-    
-    [fedcred]
-    provider = {okta, adfs}
-    aws_credential_profile = default
-    sslverify = True
-    
-    [okta]
-    organization = <yourorg>.okta.com
-    app_url = <okta application url>
-    
-    [adfs]
-    ntlmauth = {True, False}
-    url = https://<adfs fqdn>/adfs/ls/idpinitiatedsignon.aspx?loginToRp=urn:amazon:webservices
-
-
-Usage
------
-
-.. code-block:: sh
-
-    $ fedcred
-
 %endif # with_python3
 
 %prep
@@ -177,16 +135,18 @@ Usage
 %install
 %if 0%{with_python2}
 %py2_install
-%{__mv} $RPM_BUILD_ROOT%{_bindir}/${script} $RPM_BUILD_ROOT%{_bindir}/${script}-%{python2_version}
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/fedcred $RPM_BUILD_ROOT%{_bindir}/fedcred-%{python2_version}
+
 %if ! 0%{with_python3}
-%{__ln_s} ${script}-%{python2_version} $RPM_BUILD_ROOT%{_bindir}/${script}
+%
+%{__ln_s} fedcred-%{python2_version} $RPM_BUILD_ROOT%{_bindir}/fedcred
 %endif # ! with_python3
 %endif # with_python2
 %if 0%{with_python3}
 
 %py3_install
-%{__mv} $RPM_BUILD_ROOT%{_bindir}/${script} $RPM_BUILD_ROOT%{_bindir}/${script}-%{python3_version}
-%{__ln_s} ${script}-%{python3_version} $RPM_BUILD_ROOT%{_bindir}/${script}
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/fedcred $RPM_BUILD_ROOT%{_bindir}/fedcred-%{python3_version}
+%{__ln_s} fedcred-%{python3_version} $RPM_BUILD_ROOT%{_bindir}/fedcred
 %endif # with_python3
 
 %clean
@@ -196,7 +156,7 @@ rm -rf %{buildroot}
 %files -n python2-%{pypi_name}
 %defattr(-,root,root,-)
 %doc README.rst
-%{_bindir}/bin/fedcred-%{python2_version}
+%{_bindir}/fedcred-%{python2_version}
 %{python2_sitelib}/*
 %endif # with_python2
 
@@ -204,11 +164,9 @@ rm -rf %{buildroot}
 %files -n python3-%{pypi_name}
 %defattr(-,root,root,-)
 %doc README.rst
-%{_bindir}/bin/fedcred-%{python3_version}
-%{_bindir}/bin/fedcred
+%{_bindir}/fedcred-%{python3_version}
+%{_bindir}/fedcred
 %{python3_sitelib}/*
 %endif # with_python3
 
 %changelog
-* Wed May 22 2019 Nico Kadel-Garcia <nkadel@gmail.com>
-- Store initial setup generated with py2pack

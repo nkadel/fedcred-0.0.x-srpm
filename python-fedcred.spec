@@ -24,7 +24,7 @@ Url:            https://github.com/broamski/aws-fedcred
 Summary:        Get AWS API Credentials When using an Identity Provider/Federation
 License:        UNKNOWN (FIXME:No SPDX)
 Group:          Development/Languages/Python
-Source:         https://files.pythonhosted.org/packages/source/f/fedcred/fedcred-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/%(n=%{pypi_name}; echo ${n:0:1})/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %if 0%{with_python2}
@@ -149,6 +149,6 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
-* Wec May 22 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.0.2-0
+* Wed May 22 2019 Nico Kadel-Garcia <nkadel@gmail.com> - 0.0.2-0
 - Create initial setup
 
